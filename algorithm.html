@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>'Lee\'s Home - Algorithm'</title>
+    <meta charset="UTF-8">
+    <style>
+        table, th, td{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Lee's Home</h1>
+    <p id="itemList"></p>
+    <p>
+        <a href="/">To home...</a>
+    </p>
+    <p>
+        <a href="/algorithm-list">Algorithm Problem List</a>
+    </p>
+    <p>
+    <button type="button" onclick="requestProblem()">Today's Algorithm!</button>
+    </p>
+
+
+    <p id="printTitleTable"></p>
+    <p id="printHeaderTable"></p>
+    <p id="printDscpTable"></p>
+    <p id="printInputTable"></p>
+    <p id="printOutputTable"></p>
+    <p id="printURLTable"></p>
+
+    <script>
+        function requestProblem() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+
+                    // console.log(response);
+
+                    var problem_number = response.problem_number;
+                    var problem_title = response.problem_title;
+                    var problem_header = response.problem_header;
+                    var problem_description = response.problem_description;
+                    var problem_input = response.problem_input;
+                    var problem_output = response.problem_output;
+                    var problem_url = response.problem_url;
+
+                    var title_table = "<table>" +
+                        "<tr>" +
+                        "<td>" + problem_number + "번 </td>" + "<td>" + problem_title + "</td>"
+                    "</tr>" +
+                        "</table>";
+
+                    var header_table = "<table id=\"headerTable\">" +
+                        "<tr>" +
+                        "<td>시간 제한</td> <td>메모리 제한</td> <td>제출 수</td> <td>정답 제출 수</td> <td>정답자 수</td> <td>정답 비율</td>" +
+                        "</tr>" +
+                        "<tr>";
+                    var index = 0;
+                    while (index < 6) {
+                        header_table += "<td>" + problem_header[index] + "</td>"
+                        index ++;
+                    }
+                    header_table += "</tr> </table>"
+
+                    var dscp_table = "<table>" +
+                        "<tr>" +
+                        "<td> 설명 </td>" +
+                        "</tr>" +
+                        "<tr>" +
+                        "<td>" + problem_description + "</td>" +
+                        "</tr> </table>";
+
+                    var input_table = "<table>" +
+                        "<tr>" +
+                        "<td> 입력 </td>" +
+                        "</tr>" +
+                        "<tr>" +
+                        "<td>" + problem_input + "</td>" +
+                        "</tr> </table>";
+
+                    var output_table = "<table>" +
+                        "<tr>" +
+                        "<td> 출력 </td>" +
+                        "</tr>" +
+                        "<tr>" +
+                        "<td>" + problem_output + "</td>" +
+                        "</tr> </table>";
+
+                    var url_table = "<table>" +
+                        "<tr>" +
+                        "<td> URL </td>" +
+                        "</tr>" +
+                        "<tr>" +
+                        '<td><a href="' + problem_url + '">' + problem_url + "</a></td>" +
+                        "</tr> </table>";
+
+                    document.getElementById("printTitleTable").innerHTML = title_table;
+                    document.getElementById("printHeaderTable").innerHTML = header_table;
+                    document.getElementById("printDscpTable").innerHTML = dscp_table;
+                    document.getElementById("printInputTable").innerHTML = input_table;
+                    document.getElementById("printOutputTable").innerHTML = output_table;
+                    document.getElementById("printURLTable").innerHTML = url_table;
+                    
+                }
+            };
+            xhttp.open("POST", "http://127.0.0.1:5000/assign-problem", true);
+            xhttp.send();
+            //xhttp.send("fname=Henry&lname=Ford");
+        }
+    </script>
+</body>
+
+</html>
